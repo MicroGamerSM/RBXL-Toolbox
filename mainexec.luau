@@ -25,6 +25,6 @@ ui.SpawnMainUiMenuEntry(Color3.new(1, 1, 1), "Modules", function(container: Scro
 	importModuleLabel.TextColor3 = Color3.new(1, 1, 1)
 end)
 
-local PM = loadstring(game:HttpGet(https://raw.githubusercontent.com/MicroGamerSM/RBXL-Toolbox/refs/heads/main/pretendModule.luau))()
+local PM = loadstring(game:HttpGet("https://raw.githubusercontent.com/MicroGamerSM/RBXL-Toolbox/refs/heads/main/pretendModule.luau"))()
 wait(2)
 PM.Initialize(ui)
