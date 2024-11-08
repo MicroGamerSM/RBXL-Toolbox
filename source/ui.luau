@@ -6,7 +6,7 @@ local ui = {
 	theme = {
 		corner                                         = Instance.new("UICorner"),
 		drag                                           = Instance.new("UIDragDetector"),
-		baseColor                                      = Color3.new(0.203922, 0.184314, 0.231373) --[[Color3.new(1, 0, 0)]],
+		baseColor                                      = Color3.new(0.34902, 0.0980392, 0.705882),
 		windowMediaAreaColor                           = Color3.new(0.203922, 0.184314, 0.231373),
 		windowTopbarColor                              = Color3.new(0.34902, 0.0980392, 0.705882),
 		windowTopbarSize                               = 25,
@@ -17,7 +17,7 @@ local ui = {
 		mainUiCategorySelectionButtonHeight            = 30,
 		mainUiCategorySelectionButtonTextSize          = 14,
 		mainUiCategorySelectionButtonTextSizeAutomatic = true,
-		mainUiMediaPadding                             = 5
+		mainUiMediaPadding                             = 10
 	},
 	container = nil,
 	mainUi = nil,
@@ -105,16 +105,30 @@ function ui.SpawnMainToolboxUi()
 	
 	--Media Area
 	
-	local media = Instance.new("Frame", frame)
+	local mediaBorder = Instance.new("Frame", frame)
+	mediaBorder.Name = "mediaBorder"
+	ui.theme.corner:Clone().Parent = mediaBorder
+
+	mediaBorder.Size = UDim2.new(1, -ui.theme.mainUiMediaPadding, 1, -ui.theme.windowTopbarSize - ui.theme.mainUiMediaPadding)
+
+	mediaBorder.Position = UDim2.new(0, ui.theme.mainUiMediaPadding/2, 0, ui.theme.windowTopbarSize + ui.theme.mainUiMediaPadding/2)
+
+	mediaBorder.BorderSizePixel = 0
+
+	mediaBorder.BackgroundColor3 = ui.theme.windowMediaAreaColor
+	
+	local media = Instance.new("Frame", mediaBorder)
 	media.Name = "media"
 	
-	media.Size = UDim2.new(1, 2 * -ui.theme.mainUiMediaPadding, 1, -ui.theme.windowTopbarSize + ((2 * -ui.theme.mainUiMediaPadding)))
+	ui.theme.corner:Clone().Parent = media
 	
-	media.Position = UDim2.new(0, ui.theme.mainUiMediaPadding, 0, ui.theme.windowTopbarSize + ui.theme.mainUiMediaPadding)
+	media.Size = UDim2.new(1, -ui.theme.mainUiMediaPadding, 1, -ui.theme.mainUiMediaPadding)
+	
+	media.Position = UDim2.new(0, ui.theme.mainUiMediaPadding/2, 0, ui.theme.mainUiMediaPadding/2)
 	
 	media.BorderSizePixel = 0
 	
-	media.BackgroundColor3 = ui.theme.windowMediaAreaColor
+	media.BackgroundTransparency = 1
 	
 	--Menu Buttons Area
 	
@@ -162,7 +176,7 @@ end
 	<code>mediaConstructor</code>: <code>(container: ScrollingFrame) -> nil</code> | The function used to populate the menu.
 ]]
 function ui.SpawnMainUiMenuEntry(color: Color3, label: string, mediaConstructor: (container: ScrollingFrame) -> nil)
-	local button = Instance.new("TextButton", ui.mainUi.media.buttons)
+	local button = Instance.new("TextButton", ui.mainUi.mediaBorder.media.buttons)
 	
 	ui.theme.corner:Clone().Parent = button
 	
@@ -178,7 +192,7 @@ function ui.SpawnMainUiMenuEntry(color: Color3, label: string, mediaConstructor:
 	
 	local thisPageIndex = ui.mainUiPages
 	
-	local content = Instance.new("ScrollingFrame", ui.mainUi.media.page)
+	local content = Instance.new("ScrollingFrame", ui.mainUi.mediaBorder.media.page)
 	
 	content.LayoutOrder = thisPageIndex
 	
@@ -200,8 +214,7 @@ function ui.SpawnMainUiMenuEntry(color: Color3, label: string, mediaConstructor:
 	
 	button.Activated:Connect(function()
 		content.Visible = true
-		--ui.mainUi.media.page.UIPageLayout:JumpToIndex(thisPageIndex)
-		ui.mainUi.media.page.UIPageLayout:JumpTo(content)
+		ui.mainUi.mediaBorder.media.page.UIPageLayout:JumpTo(content)
 	end)
 	
 	ui.mainUiPages = ui.mainUiPages + 1
