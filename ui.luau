@@ -27,9 +27,22 @@ local ui = {
 ui.theme.mainUiPageLayout = Instance.new("UIPageLayout")
 ui.theme.mainUiPageLayout.Circular = true
 ui.theme.mainUiPageLayout.FillDirection = Enum.FillDirection.Vertical
+ui.theme.mainUiPageLayout.EasingDirection = Enum.EasingDirection.InOut
+ui.theme.mainUiPageLayout.EasingStyle = Enum.EasingStyle.Quint
+ui.theme.mainUiPageLayout.Padding = UDim.new(0, 10)
+
+ui.theme.mainUiPageLayout.PageEnter:Connect(function(page: Instance)
+	page.Visible = true
+end)
+ui.theme.mainUiPageLayout.PageLeave:Connect(function(page: Instance)
+	page.Visible = false
+end)
+ui.theme.mainUiPageLayout.Stopped:Connect(function(currentPage: Instance)
+	currentPage.Visible = true
+end)
 
 ui.theme.mainUiCategorySelectionButtonLayout = Instance.new("UIListLayout")
-ui.theme.mainUiCategorySelectionButtonLayout.Padding = UDim.new(1, 10)
+ui.theme.mainUiCategorySelectionButtonLayout.Padding = UDim.new(0, 10)
 
 
 --[[
@@ -127,7 +140,7 @@ function ui.SpawnMainToolboxUi()
 	local page = Instance.new("Frame", media)
 	page.Name = "page"
 	
-	ui.theme.mainUiPageLayout:Clone().Parent = page
+	ui.theme.mainUiPageLayout.Parent = page
 	
 	page.Position = UDim2.new(0, ui.theme.mainUiCategorySelectionButtonContainerSize, 0, 0)
 	
@@ -136,6 +149,8 @@ function ui.SpawnMainToolboxUi()
 	page.BorderSizePixel = 0
 	
 	page.BackgroundTransparency = 1
+	
+	page.ClipsDescendants = true
 end
 
 --[[
@@ -179,10 +194,14 @@ function ui.SpawnMainUiMenuEntry(color: Color3, label: string, mediaConstructor:
 	
 	content.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	
+	content.Visible = false
+	
 	mediaConstructor(content)
 	
 	button.Activated:Connect(function()
-		ui.mainUi.media.page.UIPageLayout:JumpToIndex(thisPageIndex)
+		content.Visible = true
+		--ui.mainUi.media.page.UIPageLayout:JumpToIndex(thisPageIndex)
+		ui.mainUi.media.page.UIPageLayout:JumpTo(content)
 	end)
 	
 	ui.mainUiPages = ui.mainUiPages + 1
