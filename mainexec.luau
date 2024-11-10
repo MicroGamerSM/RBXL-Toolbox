@@ -16,6 +16,6 @@ ui.SpawnMainUiMenuEntry(Color3.new(1, 1, 1), "Modules", function(container: Scro
 	gui.Header(container, "Modules", 50)
 	gui.Header(container, "Import Module", 25)
 	gui.TextInput(container, "Module Link", 450, 20, 350, "Module Link", "", function(value: string)
-		loadstring(game:HttpGet(value))(ui, gui)
+		loadstring(game:HttpGet(value))()(ui, gui)
 	end)
 end)
