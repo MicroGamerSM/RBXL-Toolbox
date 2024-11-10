@@ -14,17 +14,8 @@ end)
 
 ui.SpawnMainUiMenuEntry(Color3.new(1, 1, 1), "Modules", function(container: ScrollingFrame): nil
 	gui.Header(container, "Modules", 50)
-	local importModuleLabel = Instance.new("TextLabel", container)
-	importModuleLabel.BackgroundTransparency = 1
-	importModuleLabel.BorderSizePixel = 0
-	importModuleLabel.Text = "Import Module"
-	importModuleLabel.TextXAlignment = Enum.TextXAlignment.Left
-	importModuleLabel.TextScaled = true
-	importModuleLabel.Size = UDim2.new(1, 0, 0, 25)
-	--importModuleLabel.Position = UDim2.new(0, 0, 0, 50)
-	importModuleLabel.TextColor3 = Color3.new(1, 1, 1)
+	gui.Header(container, "Import Module", 25)
+	gui.TextInput(container, "Module Link", 450, 20, 350, "Module Link", "", function(value: string)
+		loadstring(game:HttpGet(value))(ui, gui)
+	end)
 end)
-
-local PM = loadstring(game:HttpGet("https://raw.githubusercontent.com/MicroGamerSM/RBXL-Toolbox/refs/heads/main/pretendModule.luau"))()
-wait(2)
-PM.Initialize(ui)
